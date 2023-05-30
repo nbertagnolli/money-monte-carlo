@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.19.1/full/pyodide.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.20.0.min.js" charset="utf-8"></script>
+</head>
+<style>
+    #Progress_Status {
+        width: 50%;
+        background-color: #ddd;
+    }
+
+    #myprogressBar {
+        width: 2%;
+        height: 20px;
+        background-color: #4CAF50;
+    }
+
+    .cell {
+        border: 1px solid #ccc;
+        padding: 8px;
+    }
+</style>
+
+<body>
+    <div class="container mx-auto px-4">
+        <h1 class="text-3xl mt-6 font-bold">
+            💰 Retirement and Savings Simulator 💰
+        </h1>
+        <h2 class="text-gray">Monte Carlo Simulator for retirement and savings planning.</h2>
+        <div class="text-sm text-gray-800">App based on Julien Chaumond's work <a
+                href="https://huggingface.co/spaces/pyodide-demo/gpt2-tokenizer/blob/dd83ef4b54c44bdc742330a7cd05fc818baab34f/index.html">here</a>.
+        </div>
+        <div class="text-xs text-green-800 mt-4 js-init">Initialization: ...</div>
+        <div class="flex gap-6 mt-10">
+            <div class="flex-1 bg-gray-50 p-4 rounded-xl border border-gray-200/60">
+                <!-- Initial Assets Input -->
+                <div class="w-full px-3 mb-6 md:mb-0">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                        for="initial-assets">
+                        Initial Assets
+                    </label>
+                    <input
+                        class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                        id="initial-assets" type="number" value=710000>
+                </div>
+                <!-- Withdrawl Input -->
+                <div class="w-full px-3 mb-6 md:mb-0">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                        for="minimum-withdrawl">
+                        Amount Withdrawn / Saved per Year
+                    </label>
+                    <input
+                        class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 input-minimum-withdrawl"
+                        id="minimum-withdrawl" type="number" value=60000>
+                </div>
+                <!-- Number of Years Remaining Input use md:w-1/2 for half -->
+                <div class="w-full px-3 mb-6 md:mb-0">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                        for="number-years">
+                        Number of Years
+                    </label>
+                    <input
+                        class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 input-minimum-withdrawl"
+                        id="number-years" type="number" value=30>
+                </div>
+                <!-- Portfolio -->
+                <div class="w-full px-3 mb-6 md:mb-0">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                        for="select-portfolio">
+                        Portfolio Allocation
+                    </label>
+                    <div class="relative">
+                        <select
+                            class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                            id="select-portfolio">
+                        </select>
+                        <div
+                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <!-- Withdrawl / Saving Strategy -->
+                <div class="w-full px-3 mb-6 md:mb-0">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                        for="select-portfolio">
+                        Withdrawl / Saving Strategy
+                    </label>
+                    <div class="relative">
+                        <select
+                            class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                            id="select-strategy">
+                            <option>Constant Saving Amount</option>
+                            <option>Constant Withdrawl Rate</option>
+                            <option>Constant Withdrawl Amount</option>
+                            <option>Vanguard Method</option>
+                            <option>Dynamic Minimum Withdrawl</option>
+                        </select>
+                        <div
+                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex gap-4 my-4">
+                    <button
+                        class="js-clear bg-gray-50 flex-1 p-3 rounded font-semibold focus:outline-none">Clear</button>
+                    <button
+                        class="js-submt bg-indigo-200 flex-1 p-3 rounded font-semibold focus:outline-none">Submit</button>
+                </div>
+            </div>
+        </div>
+        <div class="flex gap-6 mt-10">
+            <div class="flex-1 bg-gray-50 p-4 rounded-xl border border-gray-200/60">
+                <table class="border-collapse table-auto w-full text-sm" id="results"></table>
+            </div>
+        </div>
+        <div id="growth-plot"></div>
+        <div id="histogram-plot"></div>
+    </div>
+    <script type="text/javascript">
+
+        function addOPtionsToSelect(select, options) {
+            for (var i = 0; i < options.length; i++) {
+                var opt = options[i];
+                var el = document.createElement("option");
+                el.textContent = opt;
+                el.value = opt;
+                select.appendChild(el);
+            }
+        }
+
+        function mean(array) {
+            const numRows = array.length;
+            const numCols = array[0].length;
+            const result = [];
+
+            for (let col = 0; col < numCols; col++) {
+                let sum = 0;
+                for (let row = 0; row < numRows; row++) {
+                    sum += array[row][col];
+                }
+                const avg = sum / numRows;
+                result.push(avg);
+            }
+
+            return result;
+        }
+
+        function standardDeviation(array) {
+            const numRows = array.length;
+            const numCols = array[0].length;
+            const means = mean(array);
+            const result = [];
+
+            for (let col = 0; col < numCols; col++) {
+                let sumSquares = 0;
+                for (let row = 0; row < numRows; row++) {
+                    const diff = array[row][col] - means[col];
+                    sumSquares += diff * diff;
+                }
+                const stdDev = Math.sqrt(sumSquares / numRows);
+                result.push(stdDev);
+            }
+
+            return result;
+        }
+
+        function addRowsFromMap(table, map) {
+            for (const [key, value] of map) {
+                if (key != "portfolio" && key != "spend" && key != "performance") {
+                    const row = table.insertRow();
+                    const keyCell = row.insertCell();
+                    const valueCell = row.insertCell();
+
+                    keyCell.textContent = key;
+                    valueCell.textContent = value.toFixed(2);
+                    // // Add CSS classes for gridlines
+                    keyCell.classList.add('border-b', 'border-slate-100', 'dark:border-slate-700', 'p-4', 'pl-8', 'text-gray-700');
+                    valueCell.classList.add('border-b', 'border-slate-100', 'dark:border-slate-700', 'p-4', 'pl-8', 'text-gray-700');
+                }
+            }
+        }
+
+        function clearTable(table) {
+            const numRows = table.rows.length;
+
+            for (let i = numRows - 1; i >= 0; i--) {
+                table.deleteRow(i);
+            }
+        }
+
+        // Setup all input fields for access.
+        const divInit = document.querySelector(".js-init");
+        const btnClear = document.querySelector(".js-clear");
+        const btnSubmt = document.querySelector(".js-submt");
+        const inputMinimumWithdrawl = document.getElementById("minimum-withdrawl");
+        const inputInitialAssets = document.getElementById("initial-assets");
+        const inputNumberYears = document.getElementById("number-years");
+        const inputSelectPortfolio = document.getElementById("select-portfolio");
+        const inputSelectStrategy = document.getElementById("select-strategy");
+        const outputTable = document.getElementById("results");
+
+        async function main() {
+            const c = console;
+
+            // Grab the python code.
+            const py_code = await (await fetch("https://raw.githubusercontent.com/nbertagnolli/money-monte-carlo/main/monte_carlo.py")).text();
+            // document.querySelector(".js-code").textContent = py_code;
+            divInit.innerHTML += `<br> Downloaded python code from present repo`;
+
+            const pyodide = await loadPyodide({
+                indexURL: "https://cdn.jsdelivr.net/pyodide/v0.19.1/full/"
+            });
+            await pyodide.loadPackage(["numpy"]);
+
+            divInit.innerHTML += `<br> Initialized Pyodide`;
+
+
+            // Load in the packages
+            pyodide.runPython(py_code);
+
+            // Add in the available portfolios to the drop down.
+            const portfolios = await (await fetch("https://raw.githubusercontent.com/nbertagnolli/money-monte-carlo/main/portfolio_returns.json")).json();
+            const portfolioNames = Object.keys(portfolios).slice(2);  // Remove Year and Inflation from the list.
+            addOPtionsToSelect(inputSelectPortfolio, portfolioNames);
+
+            const compute = async () => {
+
+                // Grab all input values.
+                const minimumWithdrawl = parseInt(inputMinimumWithdrawl.value);
+                const initialAssets = parseInt(inputInitialAssets.value);
+                const numberYears = parseInt(inputNumberYears.value);
+                const portfolioName = inputSelectPortfolio.value;
+                const strategy = inputSelectStrategy.value;
+
+                // Get the historical performance of the selected portfolio.
+                const pastPerformance = Object.keys(portfolios[portfolioName]).map(function (key) {
+                    return portfolios[portfolioName][key];
+                });
+
+
+                // TODO:: IF INFLATION IS SELECTED SUBTRACT IT FROM EACH POINT IN pastPerformance.
+
+                // Run the monte Carlo Simulation
+                const out = pyodide.runPython(`run_monte_carlo(${JSON.stringify(pastPerformance)},${JSON.stringify(numberYears)},${JSON.stringify(initialAssets)},".05",${JSON.stringify(minimumWithdrawl)}, ${JSON.stringify(strategy)})`).toJs();
+
+                // Add teh summary statistics to a table
+                addRowsFromMap(outputTable, out);
+
+                // Plot the growth of the portfolio over time.
+                histPlot = document.getElementById('growth-plot');
+                Plotly.newPlot(histPlot, [{
+                    x: Array.from(Array(numberYears).keys()),
+                    y: mean(out.get("portfolio")),
+                    type: 'scatter'
+                }], { title: "Portfolio Value Over Time", font: { size: 18 } }, { responsive: true });
+
+                // Plot the histogram results
+                histPlot = document.getElementById('histogram-plot');
+                Plotly.newPlot(histPlot, [{
+                    x: out.get("portfolio").map(row => row.slice(-1)[0]),
+                    type: "histogram",
+                    transforms: [{
+                        type: 'filter',
+                        target: 'y',
+                        targetstats: 'std',
+                        operation: '<',
+                        multiplier: 3
+                    }]
+                }], { title: "Histogram of Portfolio Value at End", font: { size: 18 } }, { responsive: true });
+            };
+
+            btnSubmt.addEventListener("click", () => {
+                clearTable(outputTable);
+                compute();
+            });
+            btnSubmt.click();
+            btnClear.addEventListener("click", () => {
+                clearTable(outputTable);
+                inputInitialAssets = 710000;
+                inputMinimumWithdrawl = 60000;
+                inputNumberYears = 30;
+                compute();
+            });
+            inputMinimumWithdrawl.focus();
+            // inputField.selectionStart = inputField.selectionEnd = inputField.value.length;
+        };
+        main();
+    </script>
+</body>
+
+</html>
