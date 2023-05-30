@@ -7,6 +7,15 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/pyodide/v0.19.1/full/pyodide.js"></script>
     <script src="https://cdn.plot.ly/plotly-2.20.0.min.js" charset="utf-8"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3P939BM3DE"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-3P939BM3DE');
+    </script>
 </head>
 <style>
     #Progress_Status {
@@ -34,6 +43,11 @@
         <h2 class="text-gray">Monte Carlo Simulator for retirement and savings planning.</h2>
         <div class="text-sm text-gray-800">App based on Julien Chaumond's work <a
                 href="https://huggingface.co/spaces/pyodide-demo/gpt2-tokenizer/blob/dd83ef4b54c44bdc742330a7cd05fc818baab34f/index.html">here</a>.
+        </div>
+        <div class="text-sm text-gray-800">If you find this helpful I always appreciate a coffee :) <a
+                href="https://www.buymeacoffee.com/nbertagnolli" target="_blank"><img
+                    src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41"
+                    width="174"></a>
         </div>
         <div class="text-xs text-green-800 mt-4 js-init">Initialization: ...</div>
         <div class="flex gap-6 mt-10">
