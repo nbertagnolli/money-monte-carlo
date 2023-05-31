@@ -205,6 +205,25 @@
             return result;
         }
 
+        const asc = arr => arr.sort((a, b) => a - b);
+
+        function quantile(arr, q) {
+            const sorted = asc(arr);
+            const pos = (sorted.length - 1) * q;
+            const base = Math.floor(pos);
+            const rest = pos - base;
+            if (sorted[base + 1] !== undefined) {
+                return sorted[base] + rest * (sorted[base + 1] - sorted[base]);
+            } else {
+                return sorted[base];
+            }
+        };
+
+        function columnQuantile(arr, q) {
+            var results = Array.from(Array(arr[0].length).keys())
+            return results.map(col => quantile(arr.map(x => x[col]), q));
+        }
+
         function addRowsFromMap(table, map) {
             for (const [key, value] of map) {
                 if (key != "portfolio" && key != "spend" && key != "performance") {
@@ -288,12 +307,36 @@
                 addRowsFromMap(outputTable, out);
 
                 // Plot the growth of the portfolio over time.
-                histPlot = document.getElementById('growth-plot');
-                Plotly.newPlot(histPlot, [{
+                linePlot = document.getElementById('growth-plot');
+                Plotly.newPlot(linePlot, [{
                     x: Array.from(Array(numberYears).keys()),
                     y: mean(out.get("portfolio")),
-                    type: 'scatter'
-                }], { title: "Portfolio Value Over Time", font: { size: 18 } }, { responsive: true });
+                    type: 'scatter',
+                    name: "Mean"
+                },
+                {
+                    x: Array.from(Array(numberYears).keys()),
+                    y: columnQuantile(out.get("portfolio"), .9),
+                    type: 'scatter',
+                    name: "90th Percentile",
+                    line: {
+                        dash: 'dot',
+                        width: 4,
+                        color: 'rgb(150,150,150)',
+                    }
+                },
+                {
+                    x: Array.from(Array(numberYears).keys()),
+                    y: columnQuantile(out.get("portfolio"), .1),
+                    type: 'scatter',
+                    name: "10th Percentile",
+                    line: {
+                        dash: 'dot',
+                        width: 4,
+                        color: 'rgb(150,150,150)'
+                    }
+                },
+                ], { title: "Portfolio Value Over Time", font: { size: 18 } }, { responsive: true });
 
                 // Plot the histogram results
                 histPlot = document.getElementById('histogram-plot');
