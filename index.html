@@ -82,10 +82,10 @@
                 <div class="w-full px-3 mb-6 md:mb-0">
                     <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                         for="minimum-withdrawl">
-                        Amount Withdrawn / Saved per Year
+                        Minimum Amount Withdrawn or Saved per Year
                     </label>
                     <input
-                        class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 input-minimum-withdrawl"
+                        class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                         id="minimum-withdrawl" type="number" value=60000>
                 </div>
                 <!-- Number of Years Remaining Input use md:w-1/2 for half -->
@@ -95,7 +95,7 @@
                         Number of Years
                     </label>
                     <input
-                        class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 input-minimum-withdrawl"
+                        class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                         id="number-years" type="number" value=30>
                 </div>
                 <!-- Portfolio -->
@@ -140,6 +140,16 @@
                             </svg>
                         </div>
                     </div>
+                </div>
+                <!-- Withdrawl Rate / Amount -->
+                <div class="w-full px-3 mb-6 md:mb-0">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 invisible"
+                        for="withdrawl-rate" id="withdrawl-rate-label">
+                        Desired withdrawl rate (.04 is a good starting point)
+                    </label>
+                    <input
+                        class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                        id="withdrawl-rate" type="hidden" value=0.04>
                 </div>
                 <div class="flex gap-4 my-4">
                     <button
@@ -257,6 +267,7 @@
         const inputNumberYears = document.getElementById("number-years");
         const inputSelectPortfolio = document.getElementById("select-portfolio");
         const inputSelectStrategy = document.getElementById("select-strategy");
+        const inputWithdrawlRate = document.getElementById("withdrawl-rate");
         const outputTable = document.getElementById("results");
 
         async function main() {
@@ -292,6 +303,17 @@
                 const portfolioName = inputSelectPortfolio.value;
                 const strategy = inputSelectStrategy.value;
 
+                // Set the withdrawl rate as visible if the strategy is not savings.
+                var withdrawlRate = 0.04;
+                if (strategy.includes("Saving")) {
+                    inputWithdrawlRate.type = "hidden";
+                    document.getElementById("withdrawl-rate-label").classList.add('invisible');
+                } else {
+                    inputWithdrawlRate.type = "number";
+                    withdrawlRate = parseFloat(inputWithdrawlRate.value);
+                    document.getElementById("withdrawl-rate-label").classList.remove('invisible');
+                }
+
                 // Get the historical performance of the selected portfolio.
                 const pastPerformance = Object.keys(portfolios[portfolioName]).map(function (key) {
                     return portfolios[portfolioName][key];
@@ -301,7 +323,7 @@
                 // TODO:: IF INFLATION IS SELECTED SUBTRACT IT FROM EACH POINT IN pastPerformance.
 
                 // Run the monte Carlo Simulation
-                const out = pyodide.runPython(`run_monte_carlo(${JSON.stringify(pastPerformance)},${JSON.stringify(numberYears)},${JSON.stringify(initialAssets)},".05",${JSON.stringify(minimumWithdrawl)}, ${JSON.stringify(strategy)})`).toJs();
+                const out = pyodide.runPython(`run_monte_carlo(${JSON.stringify(pastPerformance)},${JSON.stringify(numberYears)},${JSON.stringify(initialAssets)},${JSON.stringify(withdrawlRate)},${JSON.stringify(minimumWithdrawl)}, ${JSON.stringify(strategy)})`).toJs();
 
                 // Add teh summary statistics to a table
                 addRowsFromMap(outputTable, out);

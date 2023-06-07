@@ -237,6 +237,7 @@ def evaluate_run(
     num_runs = portfolio.shape[0]
     return MCEvaluation(
         spending_mean=np.mean(spend),
+        # spending_median=np.median(spend),
         spending_std=np.std(spend),
         average_withdrawl_rate=np.mean(spend[:, 1:] / portfolio[:, :-1]),
         average_ending_value=np.mean(portfolio[:, -1]),
@@ -304,6 +305,7 @@ def run_monte_carlo(
             results.pop(name)
         results["min_portfolio_value"] = np.min(portfolio[:, -1])
         results["max_portfolio_value"] = np.max(portfolio[:, -1])
+        results["median_portfolio_value"] = np.median(portfolio[:, -1])
         results["percentile_10"] = np.percentile(portfolio[:, -1], 10)
         results["percentile_50"] = np.percentile(portfolio[:, -1], 50)
         results["percentile_90"] = np.percentile(portfolio[:, -1], 90)
