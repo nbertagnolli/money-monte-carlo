@@ -2,7 +2,6 @@ import numpy as np
 from functools import partial
 from typing import List
 import dataclasses
-from js import document
 
 
 def conservative_average_withdrawl(
@@ -160,7 +159,7 @@ def count_busts(simulated_balances: np.array, minimum_balance: int = 120000) -> 
     :param minimum_balance: The minimum amount that is acceptable to spend per year.
     :return: The count of runs which experienced at least one failure year.
     """
-    n_busts_per_run = np.sum(simulated_balances < minimum_balance, axis=1)
+    n_busts_per_run = np.sum(np.round(simulated_balances) < minimum_balance, axis=1)
     return np.sum(n_busts_per_run > 0)
 
 
@@ -241,7 +240,7 @@ def evaluate_run(
         spending_std=np.std(spend),
         average_withdrawl_rate=np.mean(spend[:, 1:] / portfolio[:, :-1]),
         average_ending_value=np.mean(portfolio[:, -1]),
-        minimum_spend=np.nanmin(spend),
+        minimum_spend=np.nanmin(spend) if np.nanmin(spend) >= 0 else 0,
         probability_of_failure=count_busts(spend[:, 1:], min_balance) / num_runs,
     ).to_dict()
 
