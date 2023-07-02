@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.19.1/full/pyodide.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.20.0.min.js" charset="utf-8"></script>
+</head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-3P939BM3DE"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-3P939BM3DE');
+</script>
+
+<body>
+
+    <nav class="bg-white border-gray-200 dark:bg-gray-900">
+        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+            <a href="https://futurefortune.me" class="flex items-center">
+                <img src="/assets/money-bag-dollar-color-icon.svg" class="h-8 mr-3" alt="Future Fortune" />
+                <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Future Fortune</span>
+            </a>
+            <button data-collapse-toggle="navbar-default" type="button"
+                class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                aria-controls="navbar-default" aria-expanded="false">
+                <span class="sr-only">Open main menu</span>
+                <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                        d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                        clip-rule="evenodd"></path>
+                </svg>
+            </button>
+            <div class="hidden w-full md:block md:w-auto" id="navbar-default">
+                <ul
+                    class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                    <li>
+                        <a href="index.html"
+                            class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                            aria-current="page">Home</a>
+                    </li>
+                    <li>
+                        <a href="about.html"
+                            class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500"
+                            aria-current="page">About</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-10">
+        <h1
+            class="flex mb-6 mt-6 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-gray-400  items-center justify-center text-center">
+            Helping you understand your retirment</h1>
+        <p class="mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-500 ">
+            Savings and retirment are inherently random processes which makes it hard to plan for them reliably.
+            This site allows you to run thousands of simulations of different retirement or savings scenarios to
+            understand the
+            likelihood of different outcomes. Normally when we think about saving for the future we think in terms of
+            one value,
+            like if I have two million dollars at age 75 I can retire. Or if I save $1,000 dollars a month in 10 years
+            I'll have ...
+            This is easy to think about but in reality these numbers are much fuzzier. Since the stock market is random
+            the Amount
+            of money that you will have any given year is somewhat random which means that these future projections are
+            distributions.
+            By using Monte Carlo Sampling we can run thousands of simulations and get a representation of what the
+            likely outcomes
+            are for your finances at any future date. The way to use this site is to estimate distributions of wealth
+            over time,
+            and understand the simulated probability of failure under these simplifying assumptions.
+        </p>
+        <h3
+            class="justify-items-start mb-6 mt-6 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-gray-400 sm:px-16 xl:px-48 ">
+            Input Parameters</h3>
+        <h4 class="text-2xl leading-none tracking-tight font-extrabold dark:text-gray-400 sm:px-16 xl:px-48 ">Initial
+            Assets</h4>
+        <p class="mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-500">
+            Enter the starting amount of capital or savings you have. This could include your
+            investments, savings accounts, or any other financial assets you plan to utilize during retirement.
+        </p>
+        <h4 class="text-2xl font-extrabold dark:text-gray-400 sm:px-16 xl:px-48 ">Minmum Amount Withdrawn per Year</h4>
+        <p class="mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-500 ">
+            Specify the minimum annual withdrawal amount you plan to take from your retirement portfolio. This value
+            acts as a threshold for considering a year successful. If the portfolio can sustain withdrawals equal to
+            or
+            greater than this minimum amount, it is considered a successful year.
+        </p>
+        <h4 class="text-2xl font-extrabold dark:text-gray-400 sm:px-16 xl:px-48 ">Number of Years to Retirement</h4>
+        <p class="mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-500 ">
+            Enter the expected duration of your retirement. The simulation will run for this duration and determine
+            the amount of assets that you have at the end of retirement.
+        </p>
+        <h4 class="text-2xl font-extrabold dark:text-gray-400 sm:px-16 xl:px-48 ">Portfolio Allocation</h4>
+        <p class="mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-500 ">
+            Define the portfolio allocation that best represents your assets. This field is a drop down menu which
+            allows you to select a premixed portfolio from a large databse of portfolios from the folks over at
+            <a class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                href="https://docs.google.com/spreadsheets/d/1amOuO9rkMEyYpJtwjFuv_jegjl_ZEisORG9DSj7rmoc/edit#gid=1012383886">engineeredportfolio.com</a>.
+            The selected portfolio will represent your assets over the course of the simulation. When we randomly
+            sample
+            market performance for a given year the returns will be based on the historical performance of the
+            selected
+            portfolio.
+        </p>
+        <h4 class="text-2xl font-extrabold dark:text-gray-400 sm:px-16 xl:px-48 ">Withdrawal Strategy</h4>
+        <p class="mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-500 ">
+            Select the strategy you will use to withdraw money from your retirement portfolio. This represents how
+            you
+            choose to take money out each year. The options are:
+        </p>
+        <ul class="marker:text-sky-400 list-disc pl-5 space-y-2 dark:text-gray-500 lg:text-xl sm:px-16 xl:px-48">
+            <li>
+                <b>Constant Saving Amount</b> Is a special case. This runs the simulation in reverse. Instead of
+                withdrawing money. The system uses the input to `minimum amount withdrawn per year` as the amount
+                that
+                you are saving each year and the number of years is how long you want to simulate. So if you set the
+                withdrawl to 1000 and the number of years to 10 the results would be how much money you should have
+                after 10 years.
+            </li>
+            <li>
+                <b>Constant Withdrawal Rate</b> This uses the common strategy of withdrawing a constant prcentage of
+                your portfolio each year. You'll often see folks talk about the 4% withdrawl rule. If you wanted to
+                run
+                that simulation set Desired Withdrawal Rate to 0.04. Desired Withdrawal Rate only appears when this
+                strategy is selected.
+            </li>
+            <li>
+                <b>Constant Withdrawal Amount</b> This strategy is similar to the Constant Withdrawal Rate strategy
+                except that it uses a fixed dollar amount instead of a percentage. The fixed amount is set by the
+                Minimum Amount Withdrawn per Year input.
+            </li>
+            <li>
+                <b>Vanguard Method</b> Is an implementation of Vanguard's recommendation for withdrawing during
+                retirement. A full explanation can be found <a
+                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                    href="https://investor.vanguard.com/investor-resources-education/retirement/income-making-savings-last#:~:text=Here's%20a%20method%20of%20withdrawing,with%20inflation%20in%20future%20years.">here</a>
+            </li>
+            <li>
+                <b>Dynamic Minimum Withdrawal</b> This strategy looks at the performance of the previous year and
+                scales
+                the withdrawal for this year based on what previously happened to the portfolio. For example if the
+                portfolio lost money the previous year then the dynamic withdrawal strategy would take the minimum
+                amount. If the previous year had huge returns it would scale up the amount that is withdrawn.
+            </li>
+        </ul>
+        <h4 class="text-2xl font-extrabold dark:text-gray-400 sm:px-16 xl:px-48 ">Desired Withdrawal Rate</h4>
+        <p class="mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-500 ">
+            This option only appears whn the Constant Withdrawal Rate strategy is selected. This is the percentage
+            of
+            your total assets that you'd like to withdrawal per year. The default value is 0.04 which is the well
+            known4% rule.
+        </p>
+        <h3 class="text-4xl mb-6 font-extrabold dark:text-gray-400 sm:px-16 xl:px-48 ">Examples</h3>
+        <p class="mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-500 ">
+            Let's run through some example simulations. Let's run a retirement simulation for 30 years with two
+            millino
+            saved using a constatn withdrawl rate of $60,000 per year and Bill Bernstein's no brainer portfolio.
+            Which
+            is:
+
+            25% in Vanguard 500 Index VFINX (IVW) 25% in Vanguard Small Cap NAESX or VTMSX (VB) 25% in Vanguard
+            Total
+            International VGTSX or VTMGX (EFA, VEA) 25% in Vanguard Total Bond VBMFX or VBISX (BND)
+        </p>
+        <ul class="marker:text-sky-400 list-disc pl-5 space-y-2 dark:text-gray-500 lg:text-xl sm:px-16 xl:px-48">
+            <li>25% in Vanguard 500 Index VFINX (IVW)</li>
+            <li>25% in Vanguard Small Cap NAESX or VTMSX (VB)</li>
+            <li>25% in Vanguard Total International VGTSX or VTMGX (EFA, VEA)</li>
+            <li>25% in Vanguard Total Bond VBMFX or VBISX (BND)</li>
+        </ul>
+        <p class="mb-6 mt-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-500 ">
+            The input should look like:
+        </p>
+        <figure class="xl:max-w-xlg md:max-w-xlg">
+            <img class="h-auto max-w-full rounded-lg " src="/assets/constant_amount_input.png" alt="image description">
+            <figcaption class="mt-2 text-sm text-center text-gray-500 dark:text-gray-400">The inputs to the
+                simulator.
+            </figcaption>
+        </figure>
+        <p class="mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-500 ">
+            After clicking Submit wait a few seconds. The simulation takes some time to run. Once the simulation is
+            complete you should see a table and some graphs.
+        </p>
+        <figure class="xl:max-w-xlg md:max-w-xlg">
+            <img class="h-auto max-w-full rounded-lg" src="/assets/constant_amount_table.png" alt="image description">
+            <figcaption class="mt-2 text-sm text-center text-gray-500 dark:text-gray-400">The summary statistics for the
+                simulation.
+            </figcaption>
+        </figure>
+        <p class="mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-500 ">
+            The summary statistics highlight the big picture behavior of the portfolio over time. Looking at this
+            table
+            we can see that the average amount that we spent per year was $57,656. This makes sense, most years we
+            should
+            spend that constant withdrawal amount, but due to market conditions some years we didn't have enough
+            money
+            so this is less than the total. The spending standard deviation tells you how much variation there was
+            in
+            the spending. So this means that about 68% of the time the spending was between 45k and 70k
+            approximately.
+            This measure isn't as informative for the constant amount setting because the amount is constant it will
+            be
+            more interesting later. The average withdrawl rate looks at the spending divided by the portfolio value
+            of
+            the previous year. This is the percentage of the portfolio that we spent each year. The average ending
+            value
+            is how much money on average you have at the last year of the simulation. If you want to retire with 0
+            this
+            should be 0, however having a low probability of failure is in conflict with this goal. This simulator
+            is
+            not built to get to 0 but to understand risk. Minimum spend is the lowest amount of money you spent in
+            any
+            given year. Probability of failure is the percentage of simulations that failed. If we ran 100
+            simulations
+            and we ran out of money in two of them then this would be .02 like we see here.
+        </p>
+        <p class="mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-500 ">Now let's
+            take a look at the plots. The first is the total assets over time.</p>
+        <figure class="xl:max-w-xlg md:max-w-xlg">
+            <img class="h-auto max-w-full rounded-lg" src="/assets/constant_amount_value.png" alt="image description">
+            <figcaption class="mt-2 text-sm text-center text-gray-500 dark:text-gray-400">The total assets over time
+            </figcaption>
+        </figure>
+        <p class="mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-500 ">
+            This represents the total amount of money present in the portfolio at any given time. The blue line is
+            the
+            average value and they grey lines bound it with 90% confidence. This means that in 90% of the
+            simulations
+            the value lies between the two grey lines.
+        </p>
+        <p class="mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-500 ">The next plot
+            is a histogram of portfolio values at the end of the simulation. This shows you the
+            distribution of how much money there is at the end. </p>
+        <figure class="xl:max-w-xlg md:max-w-xlg">
+            <img class="h-auto max-w-full rounded-lg" src="/assets/constant_amount_histogram.png"
+                alt="image description">
+            <figcaption class="mt-2 text-sm text-center text-gray-500 dark:text-gray-400">The distribution of assets
+                at
+                the end.
+            </figcaption>
+        </figure>
+    </div>
+</body>
+
+</html>
