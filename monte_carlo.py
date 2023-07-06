@@ -253,7 +253,7 @@ def run_monte_carlo(
     minimum_withdrawl: str,
     withdrawl_strategy_name: str,
 ):
-    num_runs = 100000
+    num_runs = 80000
     num_years = int(num_years)
     initial_assets = int(initial_assets)
     withdrawl_rate = float(withdrawl_rate)
