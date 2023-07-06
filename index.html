@@ -91,14 +91,19 @@
         <div class="flex gap-6 mt-10">
             <div class="flex-1 bg-gray-50 p-4 rounded-xl border border-gray-200/60">
                 <!-- Initial Assets Input -->
-                <div class="w-full px-3 mb-6 md:mb-0">
-                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                        for="initial-assets">
+                <div data-tooltip-target="tooltip-initial-assets" class="w-full px-3 mb-6 md:mb-0">
+                    <label data-tooltip-target="tooltip-initial-assets"
+                        class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="initial-assets">
                         Initial Assets
                     </label>
-                    <input
+                    <input data-tooltip-target="tooltip-initial-assets"
                         class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                         id="initial-assets" type="number" value=710000 title="This is the text of the tooltip">
+                </div>
+                <div id="tooltip-initial-assets" role="tooltip"
+                    class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                    Tooltip content
+                    <div class="tooltip-arrow" data-popper-arrow></div>
                 </div>
                 <!-- Withdrawl Input -->
                 <div class="w-full px-3 mb-6 md:mb-0">
@@ -149,11 +154,11 @@
                         <select
                             class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                             id="select-strategy">
-                            <option>Constant Saving Amount</option>
                             <option>Constant Withdrawl Rate</option>
                             <option>Constant Withdrawl Amount</option>
                             <option>Vanguard Method</option>
                             <option>Dynamic Minimum Withdrawl</option>
+                            <option>Constant Saving Amount</option>
                         </select>
                         <div
                             class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
