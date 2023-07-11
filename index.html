@@ -100,7 +100,7 @@
                     </label>
                     <input data-tooltip-target="tooltip-initial-assets"
                         class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-                        id="initial-assets" type="number" value=710000 title="This is the text of the tooltip">
+                        id="initial-assets" type="number" value=710000 min="1">
                 </div>
                 <div id="tooltip-initial-assets" role="tooltip"
                     class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
@@ -327,7 +327,7 @@
 
                 // Grab all input values.
                 const minimumWithdrawl = parseInt(inputMinimumWithdrawl.value);
-                const initialAssets = parseInt(inputInitialAssets.value);
+                const initialAssets = parseInt(inputInitialAssets.value) + 1;
                 const numberYears = parseInt(inputNumberYears.value);
                 const portfolioName = inputSelectPortfolio.value;
                 const strategy = inputSelectStrategy.value;
