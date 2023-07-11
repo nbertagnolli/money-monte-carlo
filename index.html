@@ -93,9 +93,9 @@
         <div class="flex gap-6 mt-10">
             <div class="flex-1 bg-gray-50 p-4 rounded-xl border border-gray-200/60">
                 <!-- Initial Assets Input -->
-                <div data-tooltip-target="tooltip-initial-assets" class="w-full px-3 mb-6 md:mb-0">
-                    <label data-tooltip-target="tooltip-initial-assets"
-                        class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="initial-assets">
+                <div class="w-full px-3 mb-6 md:mb-0">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                        for="initial-assets">
                         Initial Assets
                     </label>
                     <input data-tooltip-target="tooltip-initial-assets"
@@ -104,7 +104,7 @@
                 </div>
                 <div id="tooltip-initial-assets" role="tooltip"
                     class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-                    Tooltip content
+                    The starting amount of money that you have.
                     <div class="tooltip-arrow" data-popper-arrow></div>
                 </div>
                 <!-- Withdrawl Input -->
@@ -113,9 +113,15 @@
                         for="minimum-withdrawl">
                         Minimum Amount Withdrawn or Saved per Year
                     </label>
-                    <input
+                    <input data-tooltip-target="tooltip-minimum-withdrawl"
                         class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                         id="minimum-withdrawl" type="number" value=60000>
+                </div>
+                <div id="tooltip-minimum-withdrawl" role="tooltip"
+                    class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                    The minimum amount of money you need each year. If running a saving simulation this is the amount
+                    you save each year.
+                    <div class="tooltip-arrow" data-popper-arrow></div>
                 </div>
                 <!-- Number of Years Remaining Input use md:w-1/2 for half -->
                 <div class="w-full px-3 mb-6 md:mb-0">
@@ -123,9 +129,14 @@
                         for="number-years">
                         Number of Years
                     </label>
-                    <input
+                    <input data-tooltip-target="tooltip-number-years"
                         class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                         id="number-years" type="number" value=30>
+                </div>
+                <div id="tooltip-number-years" role="tooltip"
+                    class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                    The number of years to simulate.
+                    <div class="tooltip-arrow" data-popper-arrow></div>
                 </div>
                 <!-- Portfolio -->
                 <div class="w-full px-3 mb-6 md:mb-0">
@@ -134,7 +145,7 @@
                         Portfolio Allocation
                     </label>
                     <div class="relative">
-                        <select
+                        <select data-tooltip-target="tooltip-portfolio"
                             class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                             id="select-portfolio">
                         </select>
@@ -146,6 +157,12 @@
                         </div>
                     </div>
                 </div>
+                <div id="tooltip-portfolio" role="tooltip"
+                    class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                    Select the portfolio that most closely resembles how you are planning on allocating your savings.
+                    Portfolios are taken from engineeredportfolio.com.
+                    <div class="tooltip-arrow" data-popper-arrow></div>
+                </div>
                 <!-- Withdrawl / Saving Strategy -->
                 <div class="w-full px-3 mb-6 md:mb-0">
                     <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
@@ -153,7 +170,7 @@
                         Withdrawl / Saving Strategy
                     </label>
                     <div class="relative">
-                        <select
+                        <select data-tooltip-target="tooltip-select-strategy"
                             class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                             id="select-strategy">
                             <option>Constant Withdrawl Rate</option>
@@ -170,16 +187,28 @@
                         </div>
                     </div>
                 </div>
+                <div id="tooltip-select-strategy" role="tooltip"
+                    class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                    How your money will be withdrawn or saved each year. See about page for more information.
+                    <div class="tooltip-arrow" data-popper-arrow></div>
+                </div>
                 <!-- Withdrawl Rate / Amount -->
                 <div class="w-full px-3 mb-6 md:mb-0">
                     <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2 invisible"
                         for="withdrawl-rate" id="withdrawl-rate-label">
                         Desired withdrawl rate (.04 is a good starting point)
                     </label>
-                    <input
+                    <input data-tooltip-target="tooltip-withdrawl-rate"
                         class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                         id="withdrawl-rate" type="hidden" value=0.04>
                 </div>
+                <div id="tooltip-withdrawl-rate" role="tooltip"
+                    class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+                    For certain strategies the target percent of the portfolio to withdraw each year. For the 4% rule
+                    that would be 0.04.
+                    <div class="tooltip-arrow" data-popper-arrow></div>
+                </div>
+                <!-- Run Buttons -->
                 <div class="flex gap-4 my-4">
                     <button
                         class="js-clear bg-gray-50 flex-1 p-3 rounded font-semibold focus:outline-none">Clear</button>
