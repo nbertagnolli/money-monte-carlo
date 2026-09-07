@@ -356,7 +356,7 @@
 
                 // Grab all input values.
                 const minimumWithdrawl = parseInt(inputMinimumWithdrawl.value);
-                const initialAssets = parseInt(inputInitialAssets.value) + 1;
+                const initialAssets = parseInt(inputInitialAssets.value);
                 const numberYears = parseInt(inputNumberYears.value);
                 const portfolioName = inputSelectPortfolio.value;
                 const strategy = inputSelectStrategy.value;
@@ -440,9 +440,9 @@
             btnSubmt.click();
             btnClear.addEventListener("click", () => {
                 clearTable(outputTable);
-                inputInitialAssets = 710000;
-                inputMinimumWithdrawl = 60000;
-                inputNumberYears = 30;
+                inputInitialAssets.value = 710000;
+                inputMinimumWithdrawl.value = 60000;
+                inputNumberYears.value = 30;
                 compute();
             });
             inputMinimumWithdrawl.focus();
